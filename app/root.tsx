@@ -26,6 +26,9 @@ import Announced from "./components/global/announced";
 import { ProductTypeProvider } from "./context/useProductType";
 import { SearchGlobalContextProvider } from "./context/useSearchGlobalValue";
 import ModalSearchMobile from "./components/header/modals/modal-search-mobile";
+import ChatbotTrigger from "./components/chatbot-AI/chatbot-ai-trigger";
+import ChatbotAIWindow from "./components/chatbot-AI/chatbot-ai-window";
+import { ChatbotContextProvider } from "./context/useChatbotOpen";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -60,32 +63,38 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <CheckoutContextProvider>
                   <ProductTypeProvider>
                     <SearchGlobalContextProvider>
-                      <body className="w-dvw h-auto">
-                        {pathname !== "/login" &&
-                          pathname !== "/checkout-details" &&
-                          pathname !== "/payment-process" && (
-                            <>
-                              <Header />
-                              <Announced />
-                            </>
-                          )}
-                        {children}
-                        {pathname !== "/login" &&
-                          pathname !== "/checkout-details" &&
-                          pathname !== "/payment-process" && (
-                            <>
-                              <Footer />
-                              <ModalShopping />
-                              <ModalNavContent />
-                              <ModalSearchMobile />
-                              <ButtonToTop />
-                              <WhatsappButton />
-                            </>
-                          )}
+                      <ChatbotContextProvider>
+                        <body className="w-dvw h-auto overflow-x-hidden">
+                          {pathname !== "/login" &&
+                            pathname !== "/checkout-details" &&
+                            pathname !== "/payment-process" && (
+                              <>
+                                <Header />
+                                <Announced />
+                              </>
+                            )}
+                          {children}
+                          {pathname !== "/login" &&
+                            pathname !== "/checkout-details" &&
+                            pathname !== "/payment-process" && (
+                              <>
+                                <Footer />
+                                <ModalShopping />
+                                <ModalNavContent />
+                                <ModalSearchMobile />
+                                <ChatbotAIWindow />
+                                <div className="md:right-6 z-10 right-2 fixed bottom-10 flex flex-col gap-3">
+                                  <ButtonToTop />
+                                  <WhatsappButton />
+                                  <ChatbotTrigger />
+                                </div>
+                              </>
+                            )}
 
-                        <ScrollRestoration />
-                        <Scripts />
-                      </body>
+                          <ScrollRestoration />
+                          <Scripts />
+                        </body>
+                      </ChatbotContextProvider>
                     </SearchGlobalContextProvider>
                   </ProductTypeProvider>
                 </CheckoutContextProvider>

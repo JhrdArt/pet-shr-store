@@ -1,6 +1,6 @@
 import { type RouteConfig, index, layout, prefix, route } from "@react-router/dev/routes";
 
-export default [route("/inicio", "./routes/home.tsx", { index: true }),
+export default [index("./routes/home.tsx"),
     route("/product/:itemCategory/:productName/:id", "./routes/products/product-detail.tsx"),
     ...prefix("perro", [index("./routes/products/dogs/index.tsx")]),
     ...prefix("gato", [index("./routes/products/cats/index.tsx")]),

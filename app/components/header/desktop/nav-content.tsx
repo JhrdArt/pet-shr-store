@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useNavbar } from "~/context/useNavbar";
 
-interface Props {
-  children: React.ReactNode;
-}
+interface Props {}
 
 const NavContent: React.FC<Props> = (props) => {
   const { navlinkHovered, setNavlinkHovered } = useNavbar();

@@ -4,7 +4,6 @@ import { WhatsappButtonData } from "public/data";
 
 interface Props {
   className?: string;
-  link?: boolean;
 }
 
 const WhatsappButton: React.FC<Props> = ({ className }) => {
@@ -23,7 +22,7 @@ const WhatsappButton: React.FC<Props> = ({ className }) => {
   return (
     <div
       className={clsx(
-        "fixed bottom-4 md:right-6 right-2 h-[58px] w-[58px] bg-transparent rounded-full group cursor-pointer group flex items-center justify-center z-10",
+        "relative bg-transparent rounded-full group cursor-pointer group flex items-center justify-center z-10",
         className
       )}
     >

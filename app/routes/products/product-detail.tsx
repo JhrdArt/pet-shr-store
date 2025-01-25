@@ -9,6 +9,7 @@ import { productUnitData } from "public/data";
 import Button from "~/components/ui/button";
 import RecommendedProducts from "~/components/global/recommended-products";
 import { useProduct } from "~/context/useProduct";
+import Loader from "~/components/ui/Loader/loader";
 
 interface Props {
   /*Props*/
@@ -23,6 +24,7 @@ export async function loader() {
 
 const ProductDetails: React.FC<Props> = (props) => {
   const products = useLoaderData<typeof loader>();
+  const [loading, setLoading] = useState(false);
   const { addToCart, removeFromCart, cartProducts, removeProductCompletely } =
     useProduct();
   console.log("🚀 ~ cartProducts:", cartProducts);
@@ -45,6 +47,7 @@ const ProductDetails: React.FC<Props> = (props) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    setLoading(true);
     const product = async () => {
       if (id) {
         const product = await fetchProductByID(id);
@@ -53,6 +56,7 @@ const ProductDetails: React.FC<Props> = (props) => {
       }
     };
     product();
+    setLoading(false);
   }, [id]);
 
   useEffect(() => {
@@ -173,6 +177,11 @@ const ProductDetails: React.FC<Props> = (props) => {
       removeProductCompletely(newProductSelect?.id);
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <div
       className={`${styles.baseStyleParent} flex flex-col my-5 px-4 xl:p-0 `}

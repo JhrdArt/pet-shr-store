@@ -78,7 +78,7 @@ export const headerData = {
     logo: {
       src: logo,
       name: "Shr Pet",
-      link: "/inicio",
+      link: "/",
     },
     inputLabels: {
       icon: <Search />,
@@ -128,7 +128,7 @@ export const headerData = {
   nav: [
     {
       name: "Perros",
-      link: "perro",
+      link: "/perro",
       icon: <Dog stroke="#000" />,
       submenu: true,
       sublinks: [
@@ -165,7 +165,7 @@ export const headerData = {
     },
     {
       name: "Gatos",
-      link: "gato",
+      link: "/gato",
       icon: <Cat stroke="#000" />,
       submenu: true,
       sublinks: [
@@ -204,7 +204,7 @@ export const headerData = {
     },
     {
       name: "Otros",
-      link: "otros",
+      link: "/otros",
       icon: <Rabbit stroke="#000" />,
       submenu: true,
       sublinks: [
