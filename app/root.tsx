@@ -17,7 +17,6 @@ import { ProductContextProvider } from "./context/useProduct";
 import Footer from "./components/footer";
 import ModalShopping from "./components/header/modals/modal-shopping";
 import ModalNavContent from "./components/header/modals/modal-nav-content";
-import { useEffect, useState } from "react";
 import ButtonToTop from "./components/global/button-to-top";
 import WhatsappButton from "./components/global/whatsapp-button";
 import { LoaderContextProvider } from "./context/useLoader";
