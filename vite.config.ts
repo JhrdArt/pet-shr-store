@@ -11,4 +11,13 @@ export default defineConfig({
     },
   },
   plugins: [reactRouter(), tsconfigPaths()],
+  build: {
+    target: "esnext"
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext'
+    }
+  },
+  ssr: undefined
 });

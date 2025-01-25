@@ -5,10 +5,28 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
+import { NavbarContextProvider } from "./context/useNavbar";
+import Header from "./components/header/Index";
+import { SlidePanelContextProvider } from "./context/useSlidePanel";
+import { ProductContextProvider } from "./context/useProduct";
+import Footer from "./components/footer";
+import ModalShopping from "./components/header/modals/modal-shopping";
+import ModalNavContent from "./components/header/modals/modal-nav-content";
+import { useEffect, useState } from "react";
+import ButtonToTop from "./components/global/button-to-top";
+import WhatsappButton from "./components/global/whatsapp-button";
+import { LoaderContextProvider } from "./context/useLoader";
+import { UserDataContextProvider } from "./context/useUserData";
+import { CheckoutContextProvider } from "./context/useCheckoutDetails";
+import Announced from "./components/global/announced";
+import { ProductTypeProvider } from "./context/useProductType";
+import { SearchGlobalContextProvider } from "./context/useSearchGlobalValue";
+import ModalSearchMobile from "./components/header/modals/modal-search-mobile";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -22,9 +40,11 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
   { rel: "stylesheet", href: stylesheet },
+  { rel: "icon", href: "../public/icons/logo.png", type: "favicon" },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
   return (
     <html lang="en">
       <head>
@@ -33,11 +53,48 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
+      <ProductContextProvider>
+        <SlidePanelContextProvider>
+          <NavbarContextProvider>
+            <LoaderContextProvider>
+              <UserDataContextProvider>
+                <CheckoutContextProvider>
+                  <ProductTypeProvider>
+                    <SearchGlobalContextProvider>
+                      <body className="w-dvw h-auto">
+                        {pathname !== "/login" &&
+                          pathname !== "/checkout-details" &&
+                          pathname !== "/payment-process" && (
+                            <>
+                              <Header />
+                              <Announced />
+                            </>
+                          )}
+                        {children}
+                        {pathname !== "/login" &&
+                          pathname !== "/checkout-details" &&
+                          pathname !== "/payment-process" && (
+                            <>
+                              <Footer />
+                              <ModalShopping />
+                              <ModalNavContent />
+                              <ModalSearchMobile />
+                              <ButtonToTop />
+                              <WhatsappButton />
+                            </>
+                          )}
+
+                        <ScrollRestoration />
+                        <Scripts />
+                      </body>
+                    </SearchGlobalContextProvider>
+                  </ProductTypeProvider>
+                </CheckoutContextProvider>
+              </UserDataContextProvider>
+            </LoaderContextProvider>
+          </NavbarContextProvider>
+        </SlidePanelContextProvider>
+      </ProductContextProvider>
     </html>
   );
 }
