@@ -41,7 +41,7 @@ const ChatbotAIWindow: React.FC<Props> = (props) => {
   return (
     <div
       className={`w-[350px] xl:h-[450px] bg-white rounded fixed right-5 bottom-5 z-30 px-2 py-4 shadow-lg duration-300 ease-out space-y-2 ${
-        openChatbot ? "" : "animate-slide-out "
+        openChatbot ? "visible " : "animate-slide-out invisible"
       } `}
     >
       <div className="flex w-full items-center justify-between h-10 ">
