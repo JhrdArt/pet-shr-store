@@ -40,11 +40,11 @@ const ChatbotTrigger: React.FC<Props> = (props) => {
       </Button>
       {showMessage && (
         <span
-          className={`absolute bg-blue-600 px-3 py-2 text-white -left-[180px] top-1/2 -translate-y-1/2 text-nowrap ${
+          className={`absolute bg-blue-600 px-3 py-2 text-white -left-[200px] top-1/2 -translate-y-1/2 text-nowrap ${
             showMessage ? "scale-100 " : "scale-0"
           } duration-300 rounded-t rounded-bl `}
         >
-          Chatea con una IA
+          Chatea con Pelusa-AI
         </span>
       )}
 
