@@ -1,6 +1,7 @@
 import { BotIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import Button from "../ui/button";
+import { useChatbotContext } from "~/context/useChatbotOpen";
 
 interface Props {
   /*Props*/
@@ -8,19 +9,29 @@ interface Props {
 
 const ChatbotTrigger: React.FC<Props> = (props) => {
   const [showMessage, setShowMessage] = useState(false);
+  const { openChatbot, setOpenChatbot } = useChatbotContext();
+  console.log("🚀 ~ openChatbot:", openChatbot);
 
   useEffect(() => {
-    setShowMessage(true);
+    setShowMessage(false);
     const hideTimer = setTimeout(() => {
-      setShowMessage(false);
-    }, 10000);
+      setShowMessage(true);
+    }, 12000);
+    setShowMessage(false);
     return () => {
       clearTimeout(hideTimer);
     };
   }, []);
 
+  const handleOpenChatbot = () => {
+    setOpenChatbot(!openChatbot);
+  };
+
   return (
-    <div className="h-14 w-14 bg-blue-600 rounded-full flex items-center justify-center group relative shadow-md">
+    <div
+      className="h-14 w-14 bg-blue-600 rounded-full flex items-center justify-center group relative shadow-md"
+      onClick={handleOpenChatbot}
+    >
       <Button variant="icon" ariaLabel="chatbot trigger">
         <BotIcon
           className="text-white text-center group-hover:animate-bounce"

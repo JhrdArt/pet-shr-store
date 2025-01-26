@@ -22,9 +22,7 @@ const CardProduct: React.FC<Props> = ({ product, className }) => {
   const { addToCart, cartProducts } = useProduct();
   const set = new Set<string>();
   cartProducts.forEach((p) => set.add(p.itemCategory));
-  const arrCategory = Array.from(set);
 
-  console.log(arrCategory);
   const handleAddToCart = (product: Product) => {
     console.log(product);
     addToCart({

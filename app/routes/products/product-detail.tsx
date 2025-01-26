@@ -27,7 +27,6 @@ const ProductDetails: React.FC<Props> = (props) => {
   const [loading, setLoading] = useState(false);
   const { addToCart, removeFromCart, cartProducts, removeProductCompletely } =
     useProduct();
-  console.log("🚀 ~ cartProducts:", cartProducts);
   const [product, setProduct] = useState<Product>();
   const [currentTarget, setCurrentTarget] = useState(0);
   console.log("🚀 ~ currentTarget:", currentTarget);
@@ -42,7 +41,6 @@ const ProductDetails: React.FC<Props> = (props) => {
     alt: "Imagen vacía",
   });
   const [fade, setFade] = useState(false);
-  console.log("🚀 ~ product:", product);
   const { id } = useParams();
   const containerRef = useRef<HTMLDivElement | null>(null);
 

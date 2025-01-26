@@ -83,7 +83,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                                 <ModalNavContent />
                                 <ModalSearchMobile />
                                 <ChatbotAIWindow />
-                                <div className="md:right-6 z-10 right-2 fixed bottom-10 flex flex-col gap-3">
+                                <div className="md:right-6 z-10 right-2 fixed bottom-5 flex flex-col gap-3">
                                   <ButtonToTop />
                                   <WhatsappButton />
                                   <ChatbotTrigger />

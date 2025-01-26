@@ -15,7 +15,6 @@ const ModalShopping = () => {
   const { setActiveSlidePanel } = useSlidePanel();
   const { cartProducts, removeFromCart, addToCart, removeProductCompletely } =
     useProduct();
-  console.log("🚀 ~ ModalShopping ~ cartProducts:", cartProducts);
 
   const handleAddToCart = (product: ProductForCartShop) => {
     setLoading(true);
@@ -56,7 +55,6 @@ const ModalShopping = () => {
       return total + product.price.salesPrice.value * product.selectedQuantity;
     }, 0)
     .toFixed(2);
-  console.log(totalSalesValue > totalListPrice);
 
   const handleCloseModal = () => {
     setActiveSlidePanel("");
