@@ -2,7 +2,7 @@ import { BotIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import Button from "../ui/button";
 import { useChatbotContext } from "~/context/useChatbotOpen";
-
+import dogBot from "public/images/bot-doggi.png";
 interface Props {
   /*Props*/
 }
@@ -10,17 +10,19 @@ interface Props {
 const ChatbotTrigger: React.FC<Props> = (props) => {
   const [showMessage, setShowMessage] = useState(false);
   const { openChatbot, setOpenChatbot } = useChatbotContext();
-  console.log("🚀 ~ openChatbot:", openChatbot);
 
   useEffect(() => {
-    setShowMessage(false);
-    const hideTimer = setTimeout(() => {
+    const showTimer = setTimeout(() => {
       setShowMessage(true);
+
+      const hideTimer = setTimeout(() => {
+        setShowMessage(false);
+      }, 10000);
+
+      return () => clearTimeout(hideTimer);
     }, 12000);
-    setShowMessage(false);
-    return () => {
-      clearTimeout(hideTimer);
-    };
+
+    return () => clearTimeout(showTimer);
   }, []);
 
   const handleOpenChatbot = () => {
@@ -33,26 +35,27 @@ const ChatbotTrigger: React.FC<Props> = (props) => {
       onClick={handleOpenChatbot}
     >
       <Button variant="icon" ariaLabel="chatbot trigger">
-        <BotIcon
-          className="text-white text-center group-hover:animate-bounce"
-          size={25}
+        <img
+          src={dogBot}
+          alt="GuauGPT img"
+          className="w-14 h-14 object-contain "
         />
       </Button>
       {showMessage && (
         <span
-          className={`absolute bg-blue-600 px-3 py-2 text-white -left-[200px] top-1/2 -translate-y-1/2 text-nowrap ${
+          className={`absolute bg-blue-600 px-3 py-2 text-white -left-[150px] top-1/2 -translate-y-1/2 text-nowrap ${
             showMessage ? "scale-100 " : "scale-0"
-          } duration-300 rounded-t rounded-bl `}
+          } duration-300 rounded-t rounded-bl text-xs`}
         >
-          Chatea con Pelusa-AI
+          Chatea con GuauGPT
         </span>
       )}
 
       {!showMessage && (
         <span
-          className={`absolute bg-blue-600 px-3 py-2 -left-[180px] text-white top-1/2 scale-0 -translate-y-1/2 text-nowrap  duration-300  rounded-t rounded-bl group-hover:scale-100`}
+          className={`absolute bg-blue-600 px-3 py-2 -left-[150px] text-white top-1/2 scale-0 -translate-y-1/2 text-nowrap duration-300  rounded-t rounded-bl group-hover:scale-100 text-xs`}
         >
-          Chatea con una IA
+          Chatea con GuauGPT
         </span>
       )}
     </div>

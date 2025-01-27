@@ -1,99 +1,199 @@
-import { Dog, SendHorizonal, User2, X } from "lucide-react";
+import { Dog, SendHorizonal, Trash2, User2, X } from "lucide-react";
 import { useChatbotContext } from "~/context/useChatbotOpen";
 import Button from "../ui/button";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { styles } from "~/styles";
+import dogBot from "public/images/bot-doggi.png";
+import { postQuestionAI } from "~/services/question";
 
 interface Props {
   /*Props*/
 }
 
 type Message = {
-  role: "bot" | "user";
-  message: string;
+  role: "Chatbot" | "User";
+  message: string | null;
 };
+
+type FaqTypes = (typeof faqArray)[number]["value"];
 
 const ChatbotAIWindow: React.FC<Props> = (props) => {
   const { openChatbot, setOpenChatbot } = useChatbotContext();
+  const [faqMessage, setFaqMessage] = useState<FaqTypes>();
   const [error, setError] = useState("");
   const [userMessage, setUserMessage] = useState<Message["message"]>("");
-  const [messages, setMessage] = useState<Message[]>([
+  console.log("🚀 ~ userMessage:", userMessage);
+  const [messages, setMessages] = useState<Message[]>([
     {
-      role: "bot",
+      role: "Chatbot",
       message:
-        "Hola, soy Pelusa 🐶, tu asistente IA, estoy aquí para ayudarte a elegir el mejor producto para tu mascota. ¿Tienes alguna consulta?",
-    },
-    {
-      role: "user",
-      message: "",
+        "Hola, soy GuauGPT 🐕‍🦺, tu asistente IA, y estoy aquí para ayudarte a elegir el mejor producto para tu mascota. ¿Tienes alguna consulta?",
     },
   ]);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleFaqClick = async (faqMsg: FaqTypes) => {
+    setMessages((prev) => [...prev, { role: "User", message: faqMsg }]);
+    setMessages((prev) => [
+      ...prev,
+      { role: "Chatbot", message: "Pensando..." },
+    ]);
+
+    try {
+      const res = await postQuestionAI(faqMsg);
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        {
+          role: "Chatbot",
+          message:
+            res.message.content[0].text ??
+            "Lo siento, no puedo responder en este momento.",
+        },
+      ]);
+    } catch (error: any) {
+      setError(error && error.message);
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        { role: "Chatbot", message: "Hubo un error al procesar tu solicitud." },
+      ]);
+    }
+  };
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const message: Message = {
-      role: "user",
-      message: userMessage.trim(),
-    };
-    setMessage((prev) => [...prev, message]);
+    if (!userMessage?.trim()) return;
+    setMessages((prev) => [...prev, { role: "User", message: userMessage }]);
+    setMessages((prev) => [
+      ...prev,
+      { role: "Chatbot", message: "Estoy pensando... 🐾" },
+    ]);
     setUserMessage("");
+    try {
+      const res = await postQuestionAI(userMessage);
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        {
+          role: "Chatbot",
+          message:
+            res.message.content[0].text ??
+            "Lo siento, en este momento no podemos atenderte",
+        },
+      ]);
+    } catch (error: any) {
+      setError(error && error.message);
+    }
+  };
+
+  const messagesRef = useRef<HTMLDivElement>(null); //actualizar el height al tamaño del scrollTop
+  useEffect(() => {
+    if (messagesRef.current) {
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleClearMessages = () => {
+    //resetear el chatbot
+    setMessages([
+      {
+        role: "Chatbot",
+        message:
+          "Hola, soy GuauGPT 🐕‍🦺, tu asistente IA, y estoy aquí para ayudarte a elegir el mejor producto para tu mascota. ¿Tienes alguna consulta?",
+      },
+    ]);
   };
 
   return (
     <div
-      className={`w-[350px] xl:h-[450px] bg-white rounded fixed right-5 bottom-5 z-30 px-2 py-4 shadow-lg duration-300 ease-out space-y-2 ${
+      className={`w-[350px] xl:h-[480px] ${
+        messages.some((m) => m.role === "User") && "md:h-[650px]"
+      } bg-white rounded fixed right-5 bottom-5 z-30 px-2 py-4 shadow-lg duration-300 ease-out space-y-2 grid grid-rows-[40px_1fr_80px] ${
         openChatbot ? "visible " : "animate-slide-out invisible"
-      } `}
+      }`}
     >
-      <div className="flex w-full items-center justify-between h-10 ">
+      <div className="flex w-full items-center justify-between row-span-1">
         <h3 className="flex gap-1">
-          <strong>Pelusa bot</strong>
+          <strong>GuauGPT</strong>
         </h3>
-        <Button
-          ariaLabel="close bot"
-          type="button"
-          size="icon"
-          className="p-2 hover:bg-black/10 rounded"
-          onClick={() => setOpenChatbot(!openChatbot)}
-        >
-          <X />
-        </Button>
+        <div>
+          <Button
+            ariaLabel="close bot"
+            type="button"
+            size="icon"
+            className="p-2 hover:bg-black/10 rounded"
+            onClick={handleClearMessages}
+          >
+            <Trash2 />
+          </Button>
+          <Button
+            ariaLabel="close bot"
+            type="button"
+            size="icon"
+            className="p-2 hover:bg-black/10 rounded"
+            onClick={() => setOpenChatbot(!openChatbot)}
+          >
+            <X />
+          </Button>
+        </div>
       </div>
       {/*! Messages */}
-      <div className="w-full h-80 flex flex-col gap-2 overflow-hidden">
-        {messages.map(
-          (message, index) =>
-            message.message !== "" && (
+      <div
+        className="w-full flex flex-col gap-2 overflow-hidden row-span-1 overflow-y-auto"
+        ref={messagesRef}
+      >
+        {messages.map((message, index) => (
+          <div
+            className={`w-full grid grid-cols-[40px_1fr] text-[13px] px-2 py-4 rounded gap-0 h-fit ${
+              message.role === "Chatbot" ? "bg-gray-100" : " "
+            }`}
+            key={index}
+          >
+            {message.role === "Chatbot" ? (
+              <span className="bg-blue-600 text-white  rounded-full p-1 w-8 h-8 col-span-1">
+                <img
+                  src={dogBot}
+                  alt="doggi bot"
+                  className="w-full h-full object-contain"
+                />
+              </span>
+            ) : (
+              <span className="bg-gray-200 h-8 w-8 rounded-full p-1 col-span-1 content-center">
+                <User2 size={18} className="m-auto " />
+              </span>
+            )}
+            <p className="col-span-1">{message.message}</p>
+          </div>
+        ))}
+        {!messages.some((m) => m.role === "User") && (
+          <div className="w-full space-y-4 mt-4">
+            <h4 className="text-xs">Preguntas frecuentes:</h4>
+            {faqArray.map((question, i) => (
               <div
-                className={`w-full flex  text-[13px] px-2 py-4 rounded gap-4 ${
-                  message.role === "bot" ? "bg-gray-100" : " "
-                }`}
-                key={index}
+                onClick={() => handleFaqClick(question.question)}
+                key={i}
+                className="py-2 pl-2 border rounded-full hover:border-blue-500 duration-300"
               >
-                {message.role === "bot" ? (
-                  <span className="bg-blue-600 text-white h-fit rounded-full p-1">
-                    <Dog size={18} />
-                  </span>
-                ) : (
-                  <span className="bg-gray-300 h-fit rounded-full p-1">
-                    <User2 size={18} />
-                  </span>
-                )}
-                {message.message}
+                <button
+                  onClick={() => setFaqMessage(question.value)}
+                  type="submit"
+                  className={`${styles["p-light"]} text-xs select-none cursor-auto`}
+                >
+                  {question.question}
+                </button>
               </div>
-            )
+            ))}
+          </div>
         )}
       </div>
       {/* "submit message" */}
-      <form
-        className="w-full h-14 py-1 flex justify-between items-center group"
-        onSubmit={onSubmit}
-      >
-        <div className="w-full h-full p-1 flex items-center rounded duration-300 group-focus-visible:border-blue-500  border">
+      <div className="w-full py-1 flex flex-col items-center row-span-1">
+        <form
+          onSubmit={onSubmit}
+          className="w-full h-full p-1 flex items-center rounded duration-300 focus-within:border-blue-500  border"
+        >
           <input
-            value={userMessage}
+            value={userMessage as string}
             onChange={(e) => setUserMessage(e.target.value)}
             type="text"
-            className="w-full outline-none h-6 pl-2 text-sm"
+            className="w-full outline-none h-6 px-2 text-sm"
             placeholder="¿En qué puedo ayudarte?"
           />
           <Button
@@ -110,12 +210,27 @@ const ChatbotAIWindow: React.FC<Props> = (props) => {
               className={` ${userMessage ? "text-blue-200" : "text-gray-600"}`}
             />
           </Button>
-        </div>
-      </form>
-      <p className="text-[10px] text-center text-gray-700">
-        La IA podría cometere errores
-      </p>
+        </form>
+        <p className="text-[10px] text-center text-gray-700">
+          La IA podría cometer errores
+        </p>
+      </div>
     </div>
   );
 };
 export default ChatbotAIWindow;
+
+const faqArray = [
+  {
+    question: "¿Qué comida me recomendarías para mi gatito?",
+    value: "¿Qué comida me recomendarías para mi gatito?",
+  },
+  {
+    question: "¿Qué comida me recomendarías para mi perrito?",
+    value: "¿Qué comida me recomendarías para mi perrito?",
+  },
+  {
+    question: "Coméntame sobre las promociones existentes",
+    value: "Coméntame sobre las promociones existentes",
+  },
+];

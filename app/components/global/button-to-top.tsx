@@ -32,7 +32,7 @@ const ButtonToTop: React.FC<Props> = (props) => {
   return (
     <button
       onClick={handleToTop}
-      className={`h-[58px] w-[58px] rounded-full 
+      className={`h-14 w-14 rounded-full 
                  bg-blue-600 shadow-lg z-10 cursor-pointer
                  ${
                    showButton

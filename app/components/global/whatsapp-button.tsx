@@ -41,7 +41,7 @@ const WhatsappButton: React.FC<Props> = ({ className }) => {
 
       {showMessage && (
         <span
-          className={`absolute bg-green-600 px-3 py-2 text-white -left-[230px] top-1/2 -translate-y-1/2 text-nowrap ${
+          className={`absolute text-xs bg-green-600 px-3 py-2 text-white -left-[175px] top-1/2 -translate-y-1/2 text-nowrap ${
             showMessage ? "scale-100 " : "scale-0"
           } duration-300 rounded-t rounded-bl `}
         >
@@ -51,12 +51,11 @@ const WhatsappButton: React.FC<Props> = ({ className }) => {
 
       {!showMessage && (
         <span
-          className={`absolute bg-green-600 px-3 py-2 -left-[230px] text-white top-1/2 scale-0 -translate-y-1/2 text-nowrap  duration-300  rounded-t rounded-bl group-hover:scale-100`}
+          className={`absolute bg-green-600 px-3 py-2 -left-[175px] text-white top-1/2 scale-0 -translate-y-1/2 text-nowrap  duration-300  text-xs rounded-t rounded-bl group-hover:scale-100`}
         >
           {WhatsappButtonData.label}
         </span>
       )}
-      <span className="inset-0 absolute rounded-full animate-pulse z-0 bg-green-500 w-full h-full"></span>
     </div>
   );
 };
