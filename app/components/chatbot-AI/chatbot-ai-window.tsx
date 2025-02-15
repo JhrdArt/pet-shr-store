@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { styles } from "~/styles";
 import dogBot from "public/images/bot-doggi.png";
 import { postQuestionAI } from "~/services/question";
+import { toast } from "sonner";
 
 interface Props {
   /*Props*/
@@ -79,7 +80,7 @@ const ChatbotAIWindow: React.FC<Props> = (props) => {
         },
       ]);
     } catch (error: any) {
-      setError(error && error.message);
+      toast.error(error.message);
     }
   };
 
@@ -91,7 +92,7 @@ const ChatbotAIWindow: React.FC<Props> = (props) => {
   }, [messages]);
 
   const handleClearMessages = () => {
-    //resetear el chatbot
+    //resetear el chatbothttps://samir-dev.netlify.app/
     setMessages([
       {
         role: "Chatbot",
@@ -100,6 +101,8 @@ const ChatbotAIWindow: React.FC<Props> = (props) => {
       },
     ]);
   };
+
+  const [checkedButton, setCheckedButton] = useState(false);
 
   return (
     <div
@@ -113,6 +116,11 @@ const ChatbotAIWindow: React.FC<Props> = (props) => {
         <h3 className="flex gap-1">
           <strong>GuauGPT</strong>
         </h3>
+        <div className="pointer-events-auto h-6 w-10 rounded-full p-1 ring-1 transition duration-200 ease-in-out ring-inset bg-slate-900/10 ring-slate-900/5">
+          <div
+            className={`size-4 rounded-full bg-white ring-1 shadow-xs ring-slate-700/10 transition duration-200 ease-in-out`}
+          ></div>
+        </div>
         <div>
           <Button
             ariaLabel="close bot"
@@ -123,7 +131,7 @@ const ChatbotAIWindow: React.FC<Props> = (props) => {
           >
             <Trash2 />
           </Button>
-          <Button
+          <Button 
             ariaLabel="close bot"
             type="button"
             size="icon"

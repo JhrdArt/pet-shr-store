@@ -2,6 +2,7 @@ import Hero from "~/components/hero";
 import type { Route } from "./+types/home";
 import Sections from "~/components/sections/Index";
 import { fetchProducts } from "~/services";
+import { useLoaderData } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -14,6 +15,8 @@ export async function loader() {
   return data;
 }
 export default function Home() {
+  const products = useLoaderData<typeof loader>();
+  console.log("🚀 ~ Home ~ products:", products);
   return (
     <main className="space-y-10">
       <Hero />

@@ -1,7 +1,6 @@
 import type { Product } from "~/types";
 
 const BASE_URLS = [
-  "https://sbq2zrmh-3001.brs.devtunnels.ms",
   "http://localhost:3001",
 ];
 
