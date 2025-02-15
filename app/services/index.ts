@@ -1,7 +1,9 @@
 import type { Product } from "~/types";
 
+const BACKEND_URI = import.meta.env.VITE_BACKEND_URI
+
 const BASE_URLS = [
-  "http://localhost:3001",
+  BACKEND_URI,
 ];
 
 async function fetchWithFallback(endpoint: string) {
